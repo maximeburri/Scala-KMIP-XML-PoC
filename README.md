@@ -16,7 +16,7 @@ case class KeyBlock(
                      val keyValue : Option[KeyValue], // Not required
                      val cryptographicLength : CryptographicLength // required but MAY be omitted only if this information is available from the Key Value
                      /*...*/
-                   ) extends Tag[Structure] with Structure
+                   ) extends StructuredTag
 ```
 The fields can ba a 
 - a class extends from `Tag[A <: Type]` (`Tag[Structure]` for structures, `Tag[StringValue]` for string field, etc..)

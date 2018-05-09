@@ -9,7 +9,20 @@ trait Tag[+A<:Type] {
 }
 
 trait Structure extends Type {
-  val fields : List[Tag[Type]]
+  def fields : List[Tag[Type]] = {
+    this.asInstanceOf[Product].productIterator.toList
+      .filter(a => a != None)
+      .map( a =>
+        a match {
+        case Some(x) => x
+        case default => default
+      }
+    ).asInstanceOf[List[Tag[Type]]]
+  }
+}
+
+trait StructuredTag extends Tag[Structure] with Structure {
+  val value = this
 }
 
 case class StringValue(val value : String) extends Type
@@ -54,7 +67,6 @@ object TypeUtils {
     case _: KeyFormatType => "KeyFormatType"
     case _: KeyValue => "KeyValue"
     case _: CryptographicLength => "CryptographicLength"
-    case _ => "Unknow"
   }
 
   // HexBytes tools
