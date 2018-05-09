@@ -49,13 +49,17 @@ val keyBlock = KeyBlock(
   )
 ```
 
-For simplicity, the use of implicit conversion for values
+For simplicity, the use of implicit conversion for values e.g `String(value)` instead of `StringValue(String(value))`
 ```scala
-import KMIP.Tags.TypeImplicits._
+import KMIP.TypeImplicits._
 
-KeyFormatType(StringValue("X.509"))
-// or 
-KeyFormatType("X.509")
+val keyBlock = KeyBlock(
+    KeyFormatType("X.509"),
+    Some( // Optional, can be None
+      KeyValue(List[Byte](0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9 /*...*/))
+    ),
+    CryptographicLength(10)
+  )
 ```
 
 Convert it into XML
