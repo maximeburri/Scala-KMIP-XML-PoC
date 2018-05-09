@@ -36,6 +36,14 @@ class XMLTestsSuite  extends FunSuite{
     )
   )
 
+  test("Decoding XML integer value should be good") {
+    fromXML(<CryptographicLength type="Integer" value="3"/>) should be (CryptographicLength(IntegerValue(3)))
+  }
+
+  test("Decoding XML good tag with bad type should fail") {
+    the [Exception] thrownBy fromXML(<CryptographicLength type="String" value="3"/>)
+  }
+
   test("Decoding an XML KeyBlock should be a KeyBlock") {
     val keyBlockXML = <KeyBlock type="Structure">
       <KeyFormatType type="String" value="X.509"/>
@@ -121,5 +129,4 @@ class XMLTestsSuite  extends FunSuite{
   test("Encoding and decoding a KeyBlock with optional field should be identical") {
     fromXML(toXML(keyBlockWithoutKeyValue)) should be (keyBlockWithoutKeyValue)
   }
-
 }
