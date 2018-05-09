@@ -1,4 +1,6 @@
 # ScalaKMIP
+[![Build Status](https://travis-ci.org/maximeburri/ScalaKMIP.svg?branch=master)](https://travis-ci.org/maximeburri/ScalaKMIP)
+
 ScalaKMIP is an Scala implementation of [KMIP](https://www.oasis-open.org/committees/kmip/) (Key Management Interoperability Protocol). 
 The current project is a PoC, a first architecture design and could lead to a full implementation of KMIP 1.4.
 
