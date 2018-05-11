@@ -25,6 +25,11 @@ trait StructuredTag extends Tag[Structure] with Structure {
   val value = this
 }
 
+trait Enumeration extends Type
+trait EnumeratedTag extends Tag[Enumeration] with Enumeration {
+  val value = this
+}
+
 case class StringValue(val value : String) extends Type
 case class IntegerValue(val value : Int) extends Type
 case class ByteStringValue(val value : List[Byte]) extends Type
@@ -55,16 +60,9 @@ object TypeImplicits {
 }
 
 object TypeUtils {
-  def typeOf(a:Type) : String = a match {
-    case StringValue(value) => "String"
-    case IntegerValue(value) => "Integer"
-    case ByteStringValue(value) => "ByteString"
-    case a : Structure => "Structure"
-  }
-
   def tagToString(a:Tag[Type]) : String = a match {
     case _: KeyBlock => "KeyBlock"
-    case _: KeyFormatType => "KeyFormatType"
+    case _: KeyFormatTypeEnum => "KeyFormatType"
     case _: KeyValue => "KeyValue"
     case _: CryptographicLength => "CryptographicLength"
   }

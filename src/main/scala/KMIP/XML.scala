@@ -74,24 +74,28 @@ object XML {
       case None => throw new Exception(s"Node label ${a.label} not recognized")
     }
 
-    val isStructure = typeOfNode <:< universeTypeOf[Tag[Structure]]
     val cm = m.reflectClass(typeOfNode.typeSymbol.asClass)
     val ctor = typeOfNode.decl(universe.termNames.CONSTRUCTOR).asMethod
     val ctorm = cm.reflectConstructor(ctor)
     val params = ctor.paramLists.map(_.map(_.typeSignature)).head  // List(KMIP.Values.KeyFormatType, KMIP.Values.KeyValue, KMIP.Values.CryptographicLength)
 
-    if (!isStructure) {
-      val newValue: Type = toValue(a)
-      try {
-        ctorm(newValue).asInstanceOf[Tag[Type]]
-      }catch {
-        case e:Exception => throw new Exception(s"Cannot create ${a.label}. Given : ${newValue}, expected : ${params}" )
+    typeOfNode match {
+      case t if t <:< universeTypeOf[Tag[Structure]] => {
+        val values = mergeParamsNodesToValues(params, a.child.toList, fromXML)
+        ctorm(values: _*).asInstanceOf[Tag[Type]]
       }
-    } else {
-      val values = mergeParamsNodesToValues(params, a.child.toList, fromXML)
-      ctorm(values: _*).asInstanceOf[Tag[Type]]
+      case t if t <:< universeTypeOf[Tag[Enumeration]] => {
+        stringToEnum((a \ "@value").toString())
+      }
+      case _ => {
+        val newValue: Type = toValue(a)
+        try {
+          ctorm(newValue).asInstanceOf[Tag[Type]]
+        }catch {
+          case e:Exception => throw new Exception(s"Cannot create ${a.label}. Given : ${newValue}, expected : ${params}" )
+        }
+      }
     }
-
   }
 
   /**
@@ -105,6 +109,7 @@ object XML {
       case b: StringValue => <ttlv type="String" value={b.value}/>
       case b: IntegerValue => <ttlv type="Integer" value={b.value.toString}/>
       case b: ByteStringValue => <ttlv type="ByteString" value={bytes2hex(b.value)}/>
+      case b: Enumeration => <ttlv type="Enumeration" value={enumToString(b)}/>
       case b: Structure => <ttlv type="Structure">{b.fields.map(toXML(_))}</ttlv>
     }
     elem.copy(label = tagToString(a))
@@ -125,6 +130,22 @@ object XML {
     result
   }
 
+  def enumToString(t : Enumeration) : String = {
+    t match {
+      case KeyFormatTypeEnum.Raw => "Raw"
+      case KeyFormatTypeEnum.X509 => "X.509"
+      case KeyFormatTypeEnum.PKCS8 => "PKCS8"
+    }
+  }
+
+  def stringToEnum(t : String) : Tag[Enumeration] = {
+    t match {
+      case "Raw" => KeyFormatTypeEnum.Raw
+      case "X.509" => KeyFormatTypeEnum.X509
+      case "PKCS8" => KeyFormatTypeEnum.PKCS8
+    }
+  }
+
   /**
     * Convert a string name into a UniverseType
     * @param a
@@ -132,7 +153,7 @@ object XML {
     */
   def stringTagToType(a : String) : Option[UniverseType] =
     a match {
-      case "KeyFormatType" => Some(universeTypeOf[KeyFormatType])
+      case "KeyFormatType" => Some(universeTypeOf[KeyFormatTypeEnum])
       case "KeyBlock" => Some(universeTypeOf[KeyBlock])
       case "KeyValue" => Some(universeTypeOf[KeyValue])
       case "CryptographicLength" => Some(universeTypeOf[CryptographicLength])
