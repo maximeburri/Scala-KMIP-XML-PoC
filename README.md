@@ -12,7 +12,7 @@ The constructor is used for encoding/decoding with the Scala reflection API,
 and the signature and paramaters are used to encode and to check the decoding (cast into an object).
 ```scala
 case class KeyBlock(
-                     val keyFormatType : KeyFormatType, // Todo Need to be an enumeration
+                     val keyFormatType : KeyFormatTypeEnum, 
                      val keyValue : Option[KeyValue], // Not required
                      val cryptographicLength : CryptographicLength // required but MAY be omitted only if this information is available from the Key Value
                      /*...*/
@@ -33,9 +33,7 @@ import KMIP._
 import KMIP.XML._
 
 val keyBlock = KeyBlock(
-    KeyFormatType(
-      StringValue("X.509")
-    ),
+    KeyFormatTypeEnum.X509,
     Some( // Optional, can be None
       KeyValue(
         ByteStringValue(
@@ -54,7 +52,7 @@ For simplicity, the use of implicit conversion for values e.g `String(value)` in
 import KMIP.TypeImplicits._
 
 val keyBlock = KeyBlock(
-    KeyFormatType("X.509"),
+    KeyFormatTypeEnum.X509,
     Some( // Optional, can be None
       KeyValue(List[Byte](0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9 /*...*/))
     ),
@@ -68,7 +66,7 @@ toXML(keyBlock)
 ```
 ```XML
 <KeyBlock type="Structure">
-  <KeyFormatType type="String" value="X.509"/>
+  <KeyFormatType type="Enumeration" value="X.509"/>
   <KeyValue type="ByteString" value="00010203040506070809abcdef"/>
   <CryptographicLength type="Integer" value="16"/>
 </KeyBlock>
