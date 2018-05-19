@@ -19,13 +19,16 @@ case class KeyBlock(
                    ) extends StructuredTag
 ```
 The fields can ba a 
-- a class extends from `Tag[A <: Type]` (`Tag[Structure]` for structures, `Tag[StringValue]` for string field, etc..)
-- a `Option[Tag[A <: Type]]` for optional field
-Multiple fields and enumeration will be a future work.
+- a class extends from `Tag[A <: Type]` like 
+  - `Tag[Structure]` for structures
+  - `Tag[StringValue]` for string field, `Tag[IntegerValue]` for string field, etc..
+  - `Tag[Enumeration]` for enumeration
+- an `Option[Tag[A <: Type]]` for optional field
+- a multiple fields will be a future work (`List[Tag[A <: Type]]`) or optional multiple fields (`Option[List[Tag[A <: Type]]]`)
 
 ## Examples
 The XML encoding/decoding is implemented and the others (TTLV, JSON) will follow.
-The following structures does not follow exactly the specification and fields.
+Note that the following structures does not follow exactly the specification and fields.
 
 Create the KeyBlock structure
 ```scala
@@ -74,7 +77,10 @@ toXML(keyBlock)
 
 And parse from XML
 ```scala
-toXML(keyBlockXML)
+val parsedXML = fromXML(keyBlockXML)
+val keyBlock = parsedXML.asInstanceOf[KeyBlock]
+keyBlock.cryptographicLength // KeyFormatTypeEnum.X509
+
 ```
 
 
