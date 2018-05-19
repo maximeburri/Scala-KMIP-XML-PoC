@@ -83,5 +83,7 @@ keyBlock.cryptographicLength // KeyFormatTypeEnum.X509
 
 ```
 
+You can see more examples for XML conversion in tests at [XMLTestsSuite.scala](src/test/scala/XMLTestsSuite.scala)
+
 
 
