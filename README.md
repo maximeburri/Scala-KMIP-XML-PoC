@@ -1,5 +1,5 @@
 # Scala KMIP XML
-[![Build Status](https://travis-ci.org/maximeburri/ScalaKMIP.svg?branch=master)](https://travis-ci.org/maximeburri/ScalaKMIP)
+[![Build Status](https://travis-ci.org/maximeburri/Scala-KMIP-XML-PoC.svg?branch=master)](https://travis-ci.org/maximeburri/ScalaKMIP)
 
 **__Disclaimer__: it's a Proof of Concept (PoC) of a first architecture for encoding/decoding KMIP in XML. It is not a reliable code (use Reflection API). I work on a better binary library.**
 
