@@ -1,6 +1,7 @@
-# ScalaKMIP
+# Scala KMIP XML
 [![Build Status](https://travis-ci.org/maximeburri/ScalaKMIP.svg?branch=master)](https://travis-ci.org/maximeburri/ScalaKMIP)
-**Disclaimer: it's a proof of concept of a first architecture for encoding/decoding KMIP in XML. It is not a reliable code (use Reflection API). I work on a better binary library.**
+
+**Disclaimer: it's a Proof of Concept (PoC) of a first architecture for encoding/decoding KMIP in XML. It is not a reliable code (use Reflection API). I work on a better binary library.**
 
 ScalaKMIP is an Scala implementation of [KMIP](https://www.oasis-open.org/committees/kmip/) (Key Management Interoperability Protocol). 
 The current project is a PoC, a first architecture design and could lead to a full implementation of KMIP 1.4.
